@@ -9,7 +9,6 @@ import personal.progresscompaninon.model.User;
 import personal.progresscompaninon.repository.NoteRepository;
 import personal.progresscompaninon.repository.UserRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,13 +28,17 @@ public class NoteService {
         }
     }
 
+    public List<Note> getNotes() {
+        return getLoggedInUser().getNotes();
+    }
+
     public Note editNote(Note newNote, Long id) {
         noteRepository.editNoteById(newNote, id);
         return newNote;
     }
 
     public List<Note> getNotesByTopic(String topic) {
-        List<Note> notes = noteRepository.getNoteByTopic(topic, getLoggedInUser().getId());
+        List<Note> notes = noteRepository.getNotesByTopicAndUser(topic, getLoggedInUser());
         return notes;
     }
 
@@ -46,7 +49,8 @@ public class NoteService {
     }
 
     public boolean validateNoteType(NoteType type) {
-        return type.equals(NoteType.NOTE) || type.equals(NoteType.SKILL);
+        return type.equals(NoteType.NOTE)
+                || type.equals(NoteType.SKILL);
     }
 
     public User getLoggedInUser() {

@@ -14,13 +14,13 @@ import java.util.List;
 @Repository
 @Transactional
 public interface NoteRepository extends JpaRepository<Note, Long> {
-    @Query(value = "Select n from Note n "+ "WHERE n.topic=?1" + " and n.user.id=?2")
-    List<Note> getNoteByTopic(String topic, Long id);
+
+    List<Note> getNotesByTopicAndUser(String topic, User user);
 
     @Modifying
-    @Query(value="Update Note n " +
-    "SET n.topic = :#{#note.topic}, "+
-    "n.content = :#{#note.content} " +
-    "WHERE n.id = :id")
-    void editNoteById(@Param("note") Note note,@Param("id") Long id);
+    @Query(value = "Update Note n " +
+            "SET n.topic = :#{#note.topic}, " +
+            "n.content = :#{#note.content} " +
+            "WHERE n.id = :id")
+    void editNoteById(@Param("note") Note note, @Param("id") Long id);
 }

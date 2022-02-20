@@ -1,8 +1,8 @@
 package personal.progresscompaninon.model;
 
 public enum NoteType {
-    NOTE("N"),
-    SKILL("S");
+    NOTE("NOTE"),
+    SKILL("SKILL");
 
     private String code;
 

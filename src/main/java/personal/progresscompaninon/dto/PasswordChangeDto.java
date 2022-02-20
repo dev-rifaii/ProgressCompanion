@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 public class PasswordChangeDto {
 
     @NotBlank
-    String oldPassword;
+    private String oldPassword;
     @Size(min = 8, message = "Enter a stronger password")
-    String newPassword;
+    private String newPassword;
 }

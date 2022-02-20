@@ -9,8 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import personal.progresscompaninon.dto.LoginDto;
-import personal.progresscompaninon.dto.PasswordChangeDto;
-import personal.progresscompaninon.exception.UserAlreadyRegisteredException;
 import personal.progresscompaninon.model.User;
 import personal.progresscompaninon.service.UserService;
 
@@ -24,7 +22,7 @@ public class RegistrationController {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity<String> signIn(@RequestBody LoginDto loginDto) {
@@ -32,11 +30,10 @@ public class RegistrationController {
                 loginDto.getEmail(), loginDto.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return new ResponseEntity<>("User signed-in successfully!.", HttpStatus.OK);
+        return new ResponseEntity<>("User signed-in successfully!", HttpStatus.OK);
     }
 
     @PostMapping("/signup")
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<User> signup(@RequestBody @Valid User user) {
 
         userService.addUser(user);

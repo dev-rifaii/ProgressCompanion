@@ -41,30 +41,5 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
-//
-//    @ExceptionHandler
-//    public ResponseEntity<ErrorResponse> weakPasswordException(WeakPasswordException e) {
-//        ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
-//        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-//    }
-//
-//    @ExceptionHandler
-//    public ResponseEntity<ErrorResponse> invalidEmailException(InvalidEmailFormatException e) {
-//        ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
-//        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-//    }
-//
-//    @ExceptionHandler
-//    public ResponseEntity<ErrorResponse> wrongPasswordException(WrongPasswordException e) {
-//        ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
-//        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-//    }
-//
-//    @ExceptionHandler
-//    public ResponseEntity<ErrorResponse> nullNameException(NullNameException e) {
-//        ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
-//        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-//    }
-
 
 }

@@ -1,7 +1,6 @@
 package personal.progresscompaninon.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 import personal.progresscompaninon.dto.PasswordChangeDto;
 import personal.progresscompaninon.exception.*;
 import personal.progresscompaninon.model.Role;
-import personal.progresscompaninon.model.RoleType;
 import personal.progresscompaninon.model.User;
 import personal.progresscompaninon.repository.RoleRepository;
 import personal.progresscompaninon.repository.UserRepository;
