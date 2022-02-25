@@ -1,17 +1,24 @@
 package personal.progresscompaninon.service;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import personal.progresscompaninon.model.Note;
 import personal.progresscompaninon.model.NoteType;
 import personal.progresscompaninon.model.User;
 import personal.progresscompaninon.repository.NoteRepository;
 import personal.progresscompaninon.repository.UserRepository;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
+@NoArgsConstructor
+@Validated
 public class NoteService {
 
     @Autowired
@@ -21,7 +28,7 @@ public class NoteService {
     private UserRepository userRepository;
 
 
-    public void addNote(Note note) {
+    public void addNote(@Valid Note note) {
         note.setUser(getLoggedInUser());
         if (validateNote(note)) {
             noteRepository.save(note);
@@ -43,8 +50,7 @@ public class NoteService {
     }
 
     public boolean validateNote(Note note) {
-        return note.getContent() != null
-                && validateNoteType(note.getNoteType())
+        return validateNoteType(note.getNoteType())
                 && note.getDate() != null;
     }
 
