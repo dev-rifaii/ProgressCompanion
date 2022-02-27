@@ -9,7 +9,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import personal.progresscompaninon.dto.PasswordChangeDto;
 import personal.progresscompaninon.exception.UserAlreadyRegisteredException;
 import personal.progresscompaninon.model.Role;
@@ -23,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@ExtendWith(SpringExtension.class)
 class UserServiceTest {
 
     @Mock

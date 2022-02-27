@@ -1,30 +1,31 @@
 package personal.progresscompaninon.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import personal.progresscompaninon.dto.LoginDto;
 import personal.progresscompaninon.dto.PasswordChangeDto;
 import personal.progresscompaninon.exception.*;
-import personal.progresscompaninon.model.Role;
 import personal.progresscompaninon.model.User;
 import personal.progresscompaninon.repository.RoleRepository;
 import personal.progresscompaninon.repository.UserRepository;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Collection;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService {
     @Autowired
     private final UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private AuthenticationManager authenticationManager;
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public UserService(UserRepository userRepository, RoleRepository roleRepository) {
@@ -40,6 +41,17 @@ public class UserService implements UserDetailsService {
         user.getRoles().add(roleRepository.findByRole("ROLE_USER"));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
+    }
+
+    public boolean authenticate(LoginDto loginDto) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    loginDto.getEmail(), loginDto.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return true;
+        } catch (BadCredentialsException e) {
+            return false;
+        }
     }
 
     public void changePassword(@Valid PasswordChangeDto passwords) {
@@ -76,16 +88,4 @@ public class UserService implements UserDetailsService {
         userRepository.deleteById(id);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found in the database");
-        }
-        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        for (Role role : user.getRoles()) {
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
-        }
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
-    }
 }

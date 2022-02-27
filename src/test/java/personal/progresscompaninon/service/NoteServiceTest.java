@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -13,7 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import personal.progresscompaninon.model.Note;
 import personal.progresscompaninon.model.NoteType;
 import personal.progresscompaninon.repository.NoteRepository;
@@ -27,7 +27,6 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @ExtendWith(MockitoExtension.class)
-@ExtendWith(SpringExtension.class)
 class NoteServiceTest {
 
     @Mock
@@ -40,13 +39,13 @@ class NoteServiceTest {
     Authentication authentication;
 
     private Validator validator;
+    @InjectMocks
     private NoteService noteService;
 
     @BeforeEach
     void setUp() {
         ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
-        noteService = new NoteService(noteRepositoryMock, userRepositoryMock);
 
     }
 
