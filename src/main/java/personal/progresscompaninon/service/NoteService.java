@@ -60,6 +60,6 @@ public class NoteService {
     }
 
     public User getLoggedInUser() {
-        return userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        return userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
     }
 }

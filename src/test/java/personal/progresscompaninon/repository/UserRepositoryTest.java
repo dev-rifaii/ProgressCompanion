@@ -34,7 +34,7 @@ class UserRepositoryTest {
 
     @Test
     void shouldRetrieveUserByEmail() {
-        User user = userRepository.findByEmail("admin");
+        User user = userRepository.findByEmail("admin").get();
         Assertions.assertNotNull(user);
     }
 
@@ -42,7 +42,7 @@ class UserRepositoryTest {
     void shouldSaveUserAndRetrieveIt() {
 
         userRepository.save(validUser);
-        User retrievedUser = userRepository.findByEmail("datajpatest@gmail.com");
+        User retrievedUser = userRepository.findByEmail("datajpatest@gmail.com").get();
         assertNotNull(retrievedUser);
     }
 
@@ -52,7 +52,7 @@ class UserRepositoryTest {
         userRepository.save(validUser);
         userRepository.changePassword("newPassword", validUser.getEmail());
         entityManager.clear();
-        User retrievedUser = userRepository.findByEmail(validUser.getEmail());
+        User retrievedUser = userRepository.findByEmail(validUser.getEmail()).get();
         assertNotEquals(validUser.getPassword(), retrievedUser.getPassword());
     }
 }

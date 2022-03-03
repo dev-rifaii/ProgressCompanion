@@ -1,5 +1,8 @@
 package personal.progresscompaninon.controller;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,11 +12,11 @@ import personal.progresscompaninon.service.NoteService;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/notes")
 public class NoteController {
 
-    @Autowired
-    private NoteService noteService;
+    private final NoteService noteService;
 
     @GetMapping
     public List<Note> notes(@RequestParam(required = false) String topic) {
@@ -25,7 +28,6 @@ public class NoteController {
 
     @PostMapping
     public ResponseEntity<?> addNote(@RequestBody Note note) {
-
         noteService.addNote(note);
         return new ResponseEntity<>("Note added", HttpStatus.OK);
     }

@@ -17,6 +17,7 @@ import personal.progresscompaninon.repository.RoleRepository;
 import personal.progresscompaninon.repository.UserRepository;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -35,9 +36,7 @@ public class UserService {
     }
 
     public void addUser(@Valid User user) {
-        if (findByEmail(user.getEmail()) != null) {
-            throw new UserAlreadyRegisteredException("User already registered");
-        }
+        checkEmailValidity(user.getEmail());
         user.getRoles().add(roleRepository.findByRole("ROLE_USER"));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
@@ -57,25 +56,22 @@ public class UserService {
     public void changePassword(@Valid PasswordChangeDto passwords) {
         User user = getLoggedInUser();
         if (bCryptPasswordEncoder.matches(passwords.getOldPassword(), user.getPassword())) {
-            if (passwordValidator(passwords.getNewPassword())) {
-                userRepository.changePassword(bCryptPasswordEncoder.encode(passwords.getNewPassword()), user.getEmail());
-            }
+            userRepository.changePassword(bCryptPasswordEncoder.encode(passwords.getNewPassword()), user.getEmail());
         } else {
             throw new WrongPasswordException("Old password didn't match");
         }
     }
 
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public void checkEmailValidity(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            throw new UserAlreadyRegisteredException("User already registered");
+        }
     }
 
-
-    public boolean passwordValidator(String password) {
-        return password.length() > 8;
-    }
 
     public User getLoggedInUser() {
-        return userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        return userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
     }
 
 

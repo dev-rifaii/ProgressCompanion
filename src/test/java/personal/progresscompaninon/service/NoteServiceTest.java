@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import personal.progresscompaninon.model.Note;
 import personal.progresscompaninon.model.NoteType;
+import personal.progresscompaninon.model.User;
 import personal.progresscompaninon.repository.NoteRepository;
 import personal.progresscompaninon.repository.UserRepository;
 
@@ -24,7 +25,10 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.Set;
+
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class NoteServiceTest {
@@ -52,6 +56,9 @@ class NoteServiceTest {
     @Test
     void shouldAddNote() {
         Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(authentication);
+        when(userRepositoryMock.findByEmail(authentication.getName())).thenReturn(Optional.of(new User()));
+
+
         SecurityContextHolder.setContext(mockSecurityContext);
         Note validNote = Note.builder()
                 .date(LocalDate.now())

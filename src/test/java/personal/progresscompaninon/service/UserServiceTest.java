@@ -17,6 +17,7 @@ import personal.progresscompaninon.repository.RoleRepository;
 import personal.progresscompaninon.repository.UserRepository;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -31,7 +32,6 @@ class UserServiceTest {
 
     private UserService userService;
 
-
     @Captor
     ArgumentCaptor<User> userCaptor;
 
@@ -42,6 +42,7 @@ class UserServiceTest {
     public void setup() {
         userService = new UserService(userRepositoryMock, roleRepositoryMock);
     }
+
 
     @Test
     void whenAddingNewUserItShouldBeValidatedAndSentToRepository() {
@@ -74,18 +75,11 @@ class UserServiceTest {
                 .password("testyestest")
                 .roles(new ArrayList<>())
                 .build();
-        when(userRepositoryMock.findByEmail(email)).thenReturn(user);
+        when(userRepositoryMock.findByEmail(email)).thenReturn(Optional.of(user));
         Exception exception = assertThrows(UserAlreadyRegisteredException.class, () -> userService.addUser(user));
         assertEquals("User already registered", exception.getMessage());
     }
 
-
-    @Test
-    void shouldReturnFalseWhenPasswordIsInvalid() {
-        UserService userService = new UserService(null, null);
-        String password = "qwert";
-        assertFalse(userService.passwordValidator(password));
-    }
 
     @Test
     void shouldChangePasswordAndEncryptIt() {
@@ -101,7 +95,9 @@ class UserServiceTest {
                 .email("test@gmail.com")
                 .password(oldPasswordEncoded)
                 .build();
-        when(userService.getLoggedInUser()).thenReturn(user);
+
+
+        when(userRepositoryMock.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         PasswordChangeDto passwords = new PasswordChangeDto("oldPassword", "newPassword");
         userService.changePassword(passwords);
         verify(userRepositoryMock).changePassword(stringCaptor.capture(), stringCaptor.capture());

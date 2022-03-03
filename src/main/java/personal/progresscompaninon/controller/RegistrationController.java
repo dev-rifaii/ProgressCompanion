@@ -1,6 +1,7 @@
 package personal.progresscompaninon.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,25 +16,21 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RegistrationController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity<String> signIn(@RequestBody LoginDto loginDto) {
-
         if (userService.authenticate(loginDto)) {
             return new ResponseEntity<>("User signed-in successfully!", HttpStatus.OK);
         }
         return new ResponseEntity<>("Invalid credentials", HttpStatus.UNAUTHORIZED);
-
     }
 
     @PostMapping("/signup")
     public ResponseEntity<User> signup(@RequestBody @Valid User user) {
-
         userService.addUser(user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
